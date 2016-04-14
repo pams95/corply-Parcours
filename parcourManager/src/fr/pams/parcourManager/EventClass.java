@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.md_5.bungee.api.ChatColor;
+
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
@@ -72,7 +72,7 @@ public class EventClass implements Listener
             {
                 public void run()
                 {
-                    String actionBarS = "temps: " + ChatColor.GOLD + mapminutes.get(p) + ChatColor.BLACK + " min " + ChatColor.GOLD + mapsecondes.get(p) + " sec !";
+                    String actionBarS = "§9temps: §4"  + mapminutes.get(p)  + "§9 min §4" + mapsecondes.get(p) + "§9 sec !";
                     IChatBaseComponent actionBar = ChatSerializer.a("{\"text\": \"" + actionBarS + "\"}");
                     PacketPlayOutChat actionBarpacket = new PacketPlayOutChat(actionBar, (byte)2);
                     ((CraftPlayer)p).getHandle().playerConnection.sendPacket(actionBarpacket);
@@ -318,7 +318,7 @@ public class EventClass implements Listener
             runnable.cancel();
             task.remove(p);
             bParcour.remove(p.getUniqueId());
-            Bukkit.broadcastMessage(ChatColor.AQUA + p.getName() + ChatColor.GREEN + " a réussis le jump en " + ChatColor.AQUA + mapminutes.get(p) + ChatColor.GREEN + " minutes et " + ChatColor.AQUA + mapsecondes.get(p) + ChatColor.GREEN + " secondes");
+            Bukkit.broadcastMessage("§b" + p.getName() +  "§a a réussis le jump en §b" + mapminutes.get(p) + "§a minutes et §b" +  + mapsecondes.get(p) + "§a secondes");
             p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
     }
