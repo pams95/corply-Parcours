@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ParcourManager extends JavaPlugin
 {
-  
+
     public void onEnable()
     {
         Bukkit.getPluginManager().registerEvents(new EventClass(), this);
@@ -23,7 +23,7 @@ public class ParcourManager extends JavaPlugin
         EventClass.mapminutes = new HashMap<Player, Integer>();
         EventClass.task = new HashMap<Player, BukkitRunnable>();
         EventClass.mapchekpoint = new HashMap<Player, Location>();
-       // EventClass.mapvie = new HashMap<Player, Integer>();
+        EventClass.mapvie = new HashMap<Player, Integer>();
     }
-    
+
 }

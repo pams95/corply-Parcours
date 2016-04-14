@@ -34,7 +34,7 @@ public class EventClass implements Listener
     static HashMap<Player, Integer> mapminutes;
     static HashMap<Player, Integer> mapsecondes;
     static HashMap<Player, Location> mapchekpoint;
-    // static HashMap<Player, Integer> mapvie;
+    static HashMap<Player, Integer> mapvie;
     private ArrayList<UUID> bParcour = new ArrayList<UUID>();
     BukkitRunnable runnable;
     int i = 0;
@@ -164,13 +164,13 @@ public class EventClass implements Listener
             task.remove(p);
         }
 
-        if(checkPoint == 1 && bParcour.contains(p.getUniqueId()) && mapchekpoint.containsKey(p))
+        if(mapvie.get(p) >= 1 && checkPoint == 1 && bParcour.contains(p.getUniqueId()) && mapchekpoint.containsKey(p))
         {
             p.teleport(mapchekpoint.get(p));
-            //mapvie.put(p, mapvie.get(p) +1);
-            //p.sendMessage("§9[Parcour]: Il ne vous reste que " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) - 1);
+            p.sendMessage("§9[Parcour]: Il ne vous reste que " + mapvie + " vies");
         }
-       /* else
+        else
         {
             World World = p.getWorld();
             Location blockParcour = new Location(World, 327.5, 53, 79.5);
@@ -180,8 +180,8 @@ public class EventClass implements Listener
             runnable.cancel();
             checkPoint = 0;
             p.teleport(blockParcour);
-            //p.sendMessage("§9Tu n'as plus de vie :(");
-        }*/
+            p.sendMessage("§9Tu n'as plus de vie :(");
+        }
     }
 
     @SuppressWarnings("unused")
@@ -209,6 +209,7 @@ public class EventClass implements Listener
         if(blockdébut < 1 && blockdébut > 0 && blocdébut == false)
         {
             mapchekpoint.put(p, spawnparcour);
+            mapvie.put(p, 0);
             p.sendMessage("§9[Parcour]: Le parcoure commence, essaie de le faire le plus rapidement possible !");
             bParcour.add(p.getUniqueId());
             début = 0;
@@ -232,8 +233,8 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 1er checkpoint !");
-           // mapvie.put(p, mapvie.get(p) + 3);
-            //p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
+             mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance1 < 1 && blockDistance1 > 0 && bloc1 == false)
         {
@@ -245,8 +246,8 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 2eme checkpoint !");
-           // mapvie.put(p, mapvie.get(p) + 3);
-            //p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance2 < 1 && blockDistance2 > 0 && bloc2 == false)
         {
@@ -257,8 +258,8 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 3eme checkpoint !");
-          //  mapvie.put(p, mapvie.get(p) + 3);
-            //p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance3 < 1 && blockDistance3 > 0 && bloc3 == false)
         {
@@ -268,8 +269,8 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 4eme checkpoint !");
-           // mapvie.put(p, mapvie.get(p) + 3);
-            //p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance4 < 1 && blockDistance4 > 0 && bloc4 == false)
         {
@@ -278,8 +279,8 @@ public class EventClass implements Listener
             bloc5 = false;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 5eme checkpoint !");
-           // mapvie.put(p, mapvie.get(p) + 3);
-           // p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance5 < 1 && blockDistance5 > 0 && bloc5 == false)
         {
@@ -287,18 +288,18 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = false;
             p.sendMessage("§9[Parcour]: 6eme checkpoint !");
-          //  mapvie.put(p, mapvie.get(p) + 3);
-           // p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            mapvie.put(p, mapvie.get(p) + 3);
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockfin < 1 && blockfin > 0 && blocFin == false)
         {
-          //  mapvie.put(p, 0);
+             mapvie.put(p, 0);
             blocFin = true;
             runnable.cancel();
             task.remove(p);
             bParcour.remove(p.getUniqueId());
             Bukkit.broadcastMessage(ChatColor.AQUA + p.getName() + ChatColor.GREEN + " a réussis le jump en " + ChatColor.AQUA + mapminutes.get(p) + ChatColor.GREEN + " minutes et " + ChatColor.AQUA + mapsecondes.get(p) + ChatColor.GREEN + " secondes");
-          //  p.sendMessage("§9[Parcour]: Vous avez " + mapvie + " vies");
+            p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
     }
 
