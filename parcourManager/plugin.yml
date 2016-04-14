@@ -1,0 +1,11 @@
+name: ParcourManager
+author: pams_95
+version: 1.0
+main: fr.pams.parcourManager.ParcourManager
+commands:
+    setspawnparcour:
+        description: test
+        aliases: m
+    spawn:
+        description: dfefre
+        aliases: f
