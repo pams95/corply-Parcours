@@ -35,7 +35,7 @@ public class EventClass implements Listener
     static HashMap<Player, Integer> mapsecondes;
     static HashMap<Player, Location> mapchekpoint;
     static HashMap<Player, Integer> mapvie;
-    private ArrayList<UUID> bParcour = new ArrayList<UUID>();
+    static ArrayList<UUID> bParcour;
     BukkitRunnable runnable;
     int i = 0;
     int début;
@@ -44,7 +44,7 @@ public class EventClass implements Listener
     int millieu;
     boolean onCheckpoint = false;
     // onFall
-    int checkPoint;
+    static int checkPoint;
     // saveCheckpoint
     boolean blocdébut;
     boolean bloc0;
@@ -58,6 +58,7 @@ public class EventClass implements Listener
     // Timer
     private int secondesf = 10;
     private int tachef;
+    static boolean canceller;
 
     @SuppressWarnings("deprecation")
     public void sendActionBar(final Player p)
@@ -95,6 +96,12 @@ public class EventClass implements Listener
                         runnable.cancel();
                         task.remove(p);
                     }
+                    if(canceller)
+                    {
+                        canceller = false;
+                        cancel();
+                    }
+
                 }
             });
             task.get(p).runTaskTimer(Bukkit.getPluginManager().getPlugin("ParcourManager"), 0, 20);
@@ -168,7 +175,20 @@ public class EventClass implements Listener
         {
             p.teleport(mapchekpoint.get(p));
             mapvie.put(p, mapvie.get(p) - 1);
-            p.sendMessage("§9[Parcour]: Il ne vous reste que " + mapvie + " vies");
+            p.sendMessage("§9[Parcour]: Il ne vous reste que " + mapvie.get(p) + " vies");
+        }
+        else if(mapvie.get(p) >= 1 && checkPoint == 1 && !(bParcour.contains(p.getUniqueId())) && mapchekpoint.containsKey(p))
+        {
+
+            World World = p.getWorld();
+            Location blockParcour = new Location(World, 327.5, 53, 79.5);
+            bParcour.remove(p.getUniqueId());
+            task.remove(p);
+            mapchekpoint.remove(p);
+            runnable.cancel();
+            checkPoint = 0;
+            p.teleport(blockParcour);
+            p.sendMessage("§9Tu n'as plus de vie :(");
         }
         else
         {
@@ -180,7 +200,6 @@ public class EventClass implements Listener
             runnable.cancel();
             checkPoint = 0;
             p.teleport(blockParcour);
-            p.sendMessage("§9Tu n'as plus de vie :(");
         }
     }
 
@@ -210,7 +229,8 @@ public class EventClass implements Listener
         {
             mapchekpoint.put(p, spawnparcour);
             mapvie.put(p, 0);
-            p.sendMessage("§9[Parcour]: Le parcoure commence, essaie de le faire le plus rapidement possible !");
+            p.sendMessage("§9[Parcours]: Le parcoure commence, essaie de le faire le plus rapidement possible !");
+            p.sendMessage("§9[Parcours]: La commande /Test est faites pour pouvoir arrêter le parcour à tout moment :)");
             bParcour.add(p.getUniqueId());
             début = 0;
             bloc0 = false;
@@ -233,7 +253,7 @@ public class EventClass implements Listener
             bloc5 = true;
             blocFin = true;
             p.sendMessage("§9[Parcour]: 1er checkpoint !");
-             mapvie.put(p, mapvie.get(p) + 3);
+            mapvie.put(p, mapvie.get(p) + 3);
             p.sendMessage("§9[Parcour]: Vous avez " + mapvie.get(p) + " vies");
         }
         if(blockDistance1 < 1 && blockDistance1 > 0 && bloc1 == false)
@@ -293,7 +313,7 @@ public class EventClass implements Listener
         }
         if(blockfin < 1 && blockfin > 0 && blocFin == false)
         {
-             mapvie.put(p, 0);
+            mapvie.put(p, 0);
             blocFin = true;
             runnable.cancel();
             task.remove(p);

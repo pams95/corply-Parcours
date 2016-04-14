@@ -3,9 +3,6 @@ author: pams_95
 version: 1.0
 main: fr.pams.parcourManager.ParcourManager
 commands:
-    setspawnparcour:
+    test:
         description: test
-        aliases: m
-    spawn:
-        description: dfefre
-        aliases: f
+        aliases: t
