@@ -141,15 +141,12 @@ public class EventClass implements Listener
             {
                 case 164:
                     teleportToCheckpoint(p);
-                    
                     break;
                 case 2:
                     teleportToCheckpoint(p);
-                    
                     break;
                 case 3:
                     teleportToCheckpoint(p);
-                    
                     break;
                 default:
                     break;
@@ -192,34 +189,37 @@ public class EventClass implements Listener
             task.remove(p.getUniqueId());
         }
 
-        if(mapvie.get(p.getUniqueId()) >= 1 && checkPoint == 1 && bParcour.contains(p.getUniqueId()) && mapchekpoint.containsKey(p.getUniqueId()))
+        if(mapvie.get(p.getUniqueId()) > 1 && checkPoint == 1 && bParcour.contains(p.getUniqueId()) && mapchekpoint.containsKey(p.getUniqueId()))
         {
             p.teleport(mapchekpoint.get(p.getUniqueId()));
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) - 1);
             p.sendMessage("§9[Parcour]: Il ne vous reste que " + mapvie.get(p.getUniqueId()) + " vies");
         }
-        else if(mapvie.get(p.getUniqueId()) > 1 && checkPoint == 1 && !(bParcour.contains(p.getUniqueId())) && mapchekpoint.containsKey(p.getUniqueId()))
+        else if(mapvie.get(p.getUniqueId()) == 1 && checkPoint == 1 && !(bParcour.contains(p.getUniqueId())) && mapchekpoint.containsKey(p.getUniqueId()))
+        {
+            World World = p.getWorld();
+            Location blockParcour = new Location(World, 450.5, 157, 1114.5);
+            
+            task.remove(p.getUniqueId());
+            mapchekpoint.remove(p.getUniqueId());
+            runnable.cancel();
+            checkPoint = 0;
+            p.teleport(blockParcour);
+
+        }
+        else
         {
 
             World World = p.getWorld();
             Location blockParcour = new Location(World, 450.5, 157, 1114.5);
+            mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) - 1);
             task.remove(p.getUniqueId());
-            mapchekpoint.remove(p.getUniqueId());
-            runnable.cancel();
-            checkPoint = 0;
-            p.teleport(blockParcour);
-            p.sendMessage("§9Tu n'as plus de vie :(");
-        }
-        else
-        {
-            World World = p.getWorld();
-            Location blockParcour = new Location(World, 450.5, 157, 1114.5);
             bParcour.remove(p.getUniqueId());
-            task.remove(p.getUniqueId());
             mapchekpoint.remove(p.getUniqueId());
             runnable.cancel();
             checkPoint = 0;
             p.teleport(blockParcour);
+            p.sendMessage("§9Tu n'as plus de vie. Recommence");
         }
     }
 
