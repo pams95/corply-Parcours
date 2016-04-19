@@ -20,11 +20,11 @@ public class ParcourManager extends JavaPlugin
     public void onEnable()
     {
         Bukkit.getPluginManager().registerEvents(new EventClass(), this);
-        EventClass.mapsecondes = new HashMap<Player, Integer>();
-        EventClass.mapminutes = new HashMap<Player, Integer>();
-        EventClass.task = new HashMap<Player, BukkitRunnable>();
-        EventClass.mapchekpoint = new HashMap<Player, Location>();
-        EventClass.mapvie = new HashMap<Player, Integer>();
+        EventClass.mapsecondes = new HashMap<UUID, Integer>();
+        EventClass.mapminutes = new HashMap<UUID, Integer>();
+        EventClass.task = new HashMap<UUID, BukkitRunnable>();
+        EventClass.mapchekpoint = new HashMap<UUID, Location>();
+        EventClass.mapvie = new HashMap<UUID, Integer>();
         EventClass.bParcour = new ArrayList<UUID>();
         CommandExecutor ce = this;
         getCommand("test").setExecutor(ce);
@@ -37,24 +37,32 @@ public class ParcourManager extends JavaPlugin
         Location spawnparcour = new Location(World, 329.5, 53, 79.5);
         if(!(sender instanceof Player))
         {
-            p.sendMessage("vous n'êtes pas un joueur, vous ne pouvez pas éxecuter la commande");
+            p.sendMessage("vous n'êtes pas un joueur, vous ne pouvez pas éxecuter la commande.");
         }
-        if(cmd.getName().equalsIgnoreCase("test"))
+        if(cmd.getName().equalsIgnoreCase("jump"))
         {
-            if(EventClass.bParcour.contains(p.getUniqueId()))
+            if(!(args.length > 1))
             {
-                p.teleport(spawnparcour);
-                EventClass.bParcour.remove(p.getUniqueId());
-                EventClass.mapchekpoint.remove(p);
-                EventClass.checkPoint = 0;
-                EventClass.canceller = true;
-                EventClass.task.remove(p);
+                if(args[0].equalsIgnoreCase("stop"))
+                    if(EventClass.bParcour.contains(p.getUniqueId()))
+                    {
+                        p.teleport(spawnparcour);
+                        EventClass.bParcour.remove(p.getUniqueId());
+                        EventClass.mapchekpoint.remove(p.getUniqueId());
+                        EventClass.checkPoint = 0;
+                        EventClass.canceller = true;
+                        EventClass.task.remove(p.getUniqueId());
+                    }
+                    else
+                    {
+                        p.sendMessage("§9[Parcours] Pour arrêter le parcours il faut déjà l'avoir commencer.");
+                    }
+
             }
             else
             {
-                p.sendMessage("§9[Parcours] Pour arrêter le parcours il faut déjà l'avoir commencer ;)");
+                p.sendMessage("/jump stop");
             }
-
         }
 
         return false;

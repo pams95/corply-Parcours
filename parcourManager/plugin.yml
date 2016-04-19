@@ -4,5 +4,5 @@ version: 1.0
 main: fr.pams.parcourManager.ParcourManager
 commands:
     test:
-        description: test
-        aliases: t
+        description: jump
+        aliases: j
