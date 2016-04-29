@@ -3,6 +3,6 @@ author: pams_95
 version: 1.0
 main: fr.pams.parcourManager.ParcourManager
 commands:
-    test:
-        description: jump
+    jump:
+        description: permet de stoper le parcours
         aliases: j

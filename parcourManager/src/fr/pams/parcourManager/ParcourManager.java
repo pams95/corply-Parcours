@@ -27,37 +27,48 @@ public class ParcourManager extends JavaPlugin
         EventClass.mapvie = new HashMap<UUID, Integer>();
         EventClass.bParcour = new ArrayList<UUID>();
         CommandExecutor ce = this;
-        getCommand("test").setExecutor(ce);
+        getCommand("jump").setExecutor(ce);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         Player p = (Player)sender;
         World World = p.getWorld();
-        Location spawnparcour = new Location(World, 329.5, 53, 79.5);
+        Location spawnparcour = new Location(World, 450.5, 157, 1114.5);
         if(!(sender instanceof Player))
         {
             p.sendMessage("vous n'êtes pas un joueur, vous ne pouvez pas éxecuter la commande.");
         }
         if(cmd.getName().equalsIgnoreCase("jump"))
         {
-            if(!(args.length > 1))
+            if((args.length == 1))
             {
                 if(args[0].equalsIgnoreCase("stop"))
+                {
                     if(EventClass.bParcour.contains(p.getUniqueId()))
                     {
                         p.teleport(spawnparcour);
-                        EventClass.bParcour.remove(p.getUniqueId());
-                        EventClass.mapchekpoint.remove(p.getUniqueId());
                         EventClass.checkPoint = 0;
                         EventClass.canceller = true;
-                        EventClass.task.remove(p.getUniqueId());
                     }
                     else
                     {
-                        p.sendMessage("§9[Parcours] Pour arrêter le parcours il faut déjà l'avoir commencer.");
+                        p.sendMessage("Pour arrêter le parcours il faut au moins l'avoir commncé !");
                     }
+                }
+                else if(args[0].equalsIgnoreCase("help"))
+                {
+                    p.sendMessage("§6[Parcours] §fCette commande te permet d'arrêter le parcour à condition de l'avoir commencer !.");
+                }
+                else
+                {
+                    p.sendMessage("/jump stop");
+                }
 
+            }
+            else if(args.length == 0)
+            {
+                p.sendMessage("/jump stop");
             }
             else
             {
@@ -67,4 +78,7 @@ public class ParcourManager extends JavaPlugin
 
         return false;
     }
+ 
 }
+
+
