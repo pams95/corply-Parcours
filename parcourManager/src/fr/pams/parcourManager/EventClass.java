@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -28,13 +29,12 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 
 public class EventClass implements Listener
 {
-    //Timer actionbar
+    // Timer actionbar
     static HashMap<UUID, BukkitRunnable> task;
     static HashMap<UUID, Integer> mapminutes;
     static HashMap<UUID, Integer> mapsecondes;
     static BukkitRunnable runnable;
-    static boolean canceller;
-    
+
     static HashMap<UUID, Location> mapchekpoint;
     static HashMap<UUID, Integer> mapvie;
     static ArrayList<UUID> bParcour;
@@ -56,7 +56,6 @@ public class EventClass implements Listener
     // Timer firework
     private int secondesf = 10;
     private int tachef;
-   
 
     public void sendActionBar(final Player p)
     {
@@ -87,11 +86,6 @@ public class EventClass implements Listener
                     {
                         remove(p);
                     }
-                    if(canceller)
-                    {
-                        canceller = false;
-                        remove(p);
-                    }
 
                 }
             });
@@ -101,7 +95,7 @@ public class EventClass implements Listener
     }
 
     @SuppressWarnings("deprecation")
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent e)
     {
         Player p = e.getPlayer();
@@ -127,13 +121,16 @@ public class EventClass implements Listener
             saveCheckpoint(p);
 
         }
+
         // 164/2/3/171:12/159:5
         if(bParcour.contains(p.getUniqueId()))
         {
             switch(loc.getBlock().getRelative(BlockFace.DOWN).getType().getId())
             {
-
-                case 159:
+                case 18:
+                    teleportToCheckpoint(p);
+                    break;
+                case 17:
                     teleportToCheckpoint(p);
                     break;
                 case 164:
@@ -151,25 +148,23 @@ public class EventClass implements Listener
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onfallDamage(EntityDamageEvent e)
     {
-
+        e.setCancelled(true);
         if(e.getEntity() instanceof Player)
         {
             Player p = (Player)e.getEntity();
-            if(bParcour.contains(p.getUniqueId()) && e.getCause().equals(DamageCause.VOID) || e.getCause().equals(DamageCause.FALL))
+            if(!(bParcour.contains(p.getUniqueId())) && e.getCause().equals(DamageCause.VOID))
+            {
+                Location spawn = new Location(p.getWorld(), 448.5, 165, 1156.5);
+                p.teleport(spawn);
+            }
+            if(bParcour.contains(p.getUniqueId()) && e.getCause().equals(DamageCause.FALL) || e.getCause().equals(DamageCause.VOID))
             {
                 teleportToCheckpoint(p);
-                e.setCancelled(true);
             }
-            else if(!(bParcour.contains(p.getUniqueId())) && e.getCause().equals(DamageCause.VOID))
-            {
-                World World = p.getWorld();
-                Location spawn = new Location(World, 450.5, 157, 1156.5);
-                p.teleport(spawn);
-                e.setCancelled(true);
-            }
+
         }
     }
 
@@ -220,7 +215,7 @@ public class EventClass implements Listener
         double blockDistance4 = p.getLocation().distance(loc4);
         double blockDistance5 = p.getLocation().distance(loc5);
         double blockfin = p.getLocation().distance(fin);
-        if(blockdébut < 0.5 && blocdébut == false)
+        if(blockdébut < 1 && blocdébut == false)
         {
             mapchekpoint.put(p.getUniqueId(), spawnparcour);
             mapvie.put(p.getUniqueId(), 0);
@@ -237,7 +232,7 @@ public class EventClass implements Listener
             blocFin = true;
             sendActionBar(p);
         }
-        if(blockDistance0 < 0.5 && bloc0 == false)
+        if(blockDistance0 < 1 && bloc0 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc0);
             bloc0 = true;
@@ -251,7 +246,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockDistance1 < 0.5 && bloc1 == false)
+        if(blockDistance1 < 1 && bloc1 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc1);
             bloc1 = true;
@@ -264,7 +259,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockDistance2 < 0.5 && bloc2 == false)
+        if(blockDistance2 < 1 && bloc2 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc2);
             bloc2 = true;
@@ -276,7 +271,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockDistance3 < 0.5 && bloc3 == false)
+        if(blockDistance3 < 1 && bloc3 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc3);
             bloc3 = true;
@@ -287,7 +282,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockDistance4 < 0.5 && bloc4 == false)
+        if(blockDistance4 < 1 && bloc4 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc4);
             bloc4 = true;
@@ -297,7 +292,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockDistance5 < 0.5 && bloc5 == false)
+        if(blockDistance5 < 1 && bloc5 == false)
         {
             mapchekpoint.put(p.getUniqueId(), loc5);
             bloc5 = true;
@@ -306,7 +301,7 @@ public class EventClass implements Listener
             mapvie.put(p.getUniqueId(), mapvie.get(p.getUniqueId()) + 3);
             p.sendMessage("§6[Parcour]: §fVous avez " + mapvie.get(p.getUniqueId()) + " vies !");
         }
-        if(blockfin < 0.5 && blocFin == false)
+        if(blockfin < 1 && blocFin == false)
         {
             mapvie.remove(p.getUniqueId());
             Bukkit.broadcastMessage("§b" + p.getName() + "§a a réussis le jump en §b" + mapminutes.get(p.getUniqueId()) + "§a minutes et §b" + +mapsecondes.get(p.getUniqueId()) + "§a secondes !");

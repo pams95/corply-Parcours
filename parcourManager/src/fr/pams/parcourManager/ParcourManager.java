@@ -34,7 +34,7 @@ public class ParcourManager extends JavaPlugin
     {
         Player p = (Player)sender;
         World World = p.getWorld();
-        Location spawnparcour = new Location(World, 450.5, 157, 1114.5);
+        Location spawn = new Location(World, 448.5, 165, 1156.5);
         if(!(sender instanceof Player))
         {
             p.sendMessage("vous n'êtes pas un joueur, vous ne pouvez pas éxecuter la commande.");
@@ -47,9 +47,9 @@ public class ParcourManager extends JavaPlugin
                 {
                     if(EventClass.bParcour.contains(p.getUniqueId()))
                     {
-                        p.teleport(spawnparcour);
+                        p.teleport(spawn);
                         EventClass.checkPoint = 0;
-                        EventClass.canceller = true;
+                        EventClass.remove(p);
                     }
                     else
                     {
