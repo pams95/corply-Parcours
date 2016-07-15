@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -110,7 +111,7 @@ public class EventClass implements Listener
             onCheckpoint = false;
 
         }
-        if(loc.getBlock().getRelative(BlockFace.DOWN).getType().getId() == 138 && bParcour.contains(p.getUniqueId()) && onCheckpoint == false)
+        if(loc.getBlock().getRelative(BlockFace.DOWN).getType().getId() == 25 && bParcour.contains(p.getUniqueId()) && onCheckpoint == false)
         {
             onCheckpoint = true;
             checkPoint = 1;
@@ -157,7 +158,7 @@ public class EventClass implements Listener
             Player p = (Player)e.getEntity();
             if(!(bParcour.contains(p.getUniqueId())) && e.getCause().equals(DamageCause.VOID))
             {
-                Location spawn = new Location(p.getWorld(), 448.5, 165, 1156.5);
+                Location spawn = new Location(p.getWorld(), 471.5, 158, 915.5);
                 p.teleport(spawn);
             }
             if(bParcour.contains(p.getUniqueId()) && e.getCause().equals(DamageCause.FALL) || e.getCause().equals(DamageCause.VOID))
@@ -171,7 +172,7 @@ public class EventClass implements Listener
     public void teleportToCheckpoint(Player p)
     {
         World World = p.getWorld();
-        Location blockParcour = new Location(World, 450.5, 157, 1114.5);
+        Location blockParcour = new Location(World, 471.5, 158, 915.5);
         if(checkPoint == 0 && mapchekpoint.containsKey(p.getUniqueId()) && bParcour.contains(p.getUniqueId()) && task.containsKey(p.getUniqueId()) && mapvie.get(p.getUniqueId()) == 0)
         {
             p.teleport(blockParcour);
@@ -198,15 +199,15 @@ public class EventClass implements Listener
     public void saveCheckpoint(Player p)
     {
         World World = p.getWorld();
-        Location blockParcour = new Location(World, 450.5, 157, 1109.5);
-        Location spawnparcour = new Location(World, 450.5, 157, 1114.5);
-        Location loc0 = new Location(World, 481.5, 166, 1102.5);
-        Location loc1 = new Location(World, 521.5, 173, 1185.5);
-        Location loc2 = new Location(World, 469.5, 189, 1187.5);
-        Location loc3 = new Location(World, 414.5, 196, 1202.5);
-        Location loc4 = new Location(World, 370.5, 158, 1157.5);
-        Location loc5 = new Location(World, 440.5, 174, 1130.5);
-        Location fin = new Location(World, 442.5, 185, 1156.5);
+        Location blockParcour = new Location(World, 471.5, 158, 915.5);
+        Location spawnparcour = new Location(World, 471.5, 158, 915.5);
+        Location loc0 = new Location(World, 502.5, 166, 905.5);
+        Location loc1 = new Location(World, 542.5, 173, 988.5);
+        Location loc2 = new Location(World, 490.5, 189, 990.5);
+        Location loc3 = new Location(World, 435.5, 196, 1005.5);
+        Location loc4 = new Location(World, 391.5, 158, 960.5);
+        Location loc5 = new Location(World, 461.5, 174, 933.5);
+        Location fin = new Location(World, 463.5, 185, 959.5);
         double blockdébut = p.getLocation().distance(blockParcour);
         double blockDistance0 = p.getLocation().distance(loc0);
         double blockDistance1 = p.getLocation().distance(loc1);
@@ -303,8 +304,8 @@ public class EventClass implements Listener
         }
         if(blockfin < 1 && blocFin == false)
         {
-            mapvie.remove(p.getUniqueId());
             Bukkit.broadcastMessage("§b" + p.getName() + "§a a réussis le jump en §b" + mapminutes.get(p.getUniqueId()) + "§a minutes et §b" + +mapsecondes.get(p.getUniqueId()) + "§a secondes !");
+            checkPoint = 0;
             timer(p);
             blocFin = true;
             remove(p);
@@ -365,13 +366,17 @@ public class EventClass implements Listener
 
     public static void remove(Player p)
     {
-        // mapsecondes.remove(p.getUniqueId());
-        // mapminutes.remove(p.getUniqueId());
         bParcour.remove(p.getUniqueId());
         task.get(p.getUniqueId()).cancel();
         task.remove(p.getUniqueId());
         mapchekpoint.remove(p.getUniqueId());
         mapvie.remove(p.getUniqueId());
 
+    }
+
+    public void onQuit(PlayerQuitEvent e)
+    {
+        remove(e.getPlayer());
+        checkPoint = 0;
     }
 }
