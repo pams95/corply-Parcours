@@ -195,18 +195,27 @@ public class EventClass implements Listener
         }
 
     }
-
+// méthode qui permet de "save" le checkpoint c'est a dire que cela va dire a la méthode qui va me tp que c tel checkpoint ou il faut me tp
     public void saveCheckpoint(Player p)
     {
         World World = p.getWorld();
+        //spawn du parcour
         Location blockParcour = new Location(World, 471.5, 158, 915.5);
+        //bloc ou commence le parcour (sea lantern
         Location spawnparcour = new Location(World, 471.5, 158, 915.5);
+        //checkpoint 1
         Location loc0 = new Location(World, 502.5, 166, 905.5);
+        //checkpoint 2
         Location loc1 = new Location(World, 542.5, 173, 988.5);
+        //checkpoint 3
         Location loc2 = new Location(World, 490.5, 189, 990.5);
+        //ainsi de suite.. xD
         Location loc3 = new Location(World, 435.5, 196, 1005.5);
+        
         Location loc4 = new Location(World, 391.5, 158, 960.5);
+        
         Location loc5 = new Location(World, 461.5, 174, 933.5);
+        //bloc d'emeraude
         Location fin = new Location(World, 463.5, 185, 959.5);
         double blockdébut = p.getLocation().distance(blockParcour);
         double blockDistance0 = p.getLocation().distance(loc0);
@@ -313,6 +322,7 @@ public class EventClass implements Listener
         }
     }
 
+    //méthode qui envoie les firework parce que je le peux
     public void Firework(Player p)
     {
 
@@ -343,6 +353,7 @@ public class EventClass implements Listener
 
     }
 
+    //méthode qui fais répéter  les firework
     public void timer(final Player p)
     {
         tachef = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("ParcourManager"), new Runnable()
@@ -363,7 +374,7 @@ public class EventClass implements Listener
             }
         }, 0, 10);
     }
-
+//méthode qui enleve tous les fucking scheduler
     public static void remove(Player p)
     {
         bParcour.remove(p.getUniqueId());
@@ -373,7 +384,7 @@ public class EventClass implements Listener
         mapvie.remove(p.getUniqueId());
 
     }
-
+//j'espere que j'ai pas besoin de te l'expliquer celui la
     public void onQuit(PlayerQuitEvent e)
     {
         remove(e.getPlayer());

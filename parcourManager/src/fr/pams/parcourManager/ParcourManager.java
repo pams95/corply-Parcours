@@ -29,7 +29,7 @@ public class ParcourManager extends JavaPlugin
         CommandExecutor ce = this;
         getCommand("jump").setExecutor(ce);
     }
-
+//command pour arreter le jump
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         Player p = (Player)sender;
